@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./template/css/uimini.css"/>
+  <link rel="stylesheet" href="./template/css/style.css"/>
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/template/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/template/favicon-16x16.png">
+  <title>Load .xlsx</title>
+</head>
+<body>
+  <table class="ui-table ui-table--hover cast-table">
+    <thead>
+      <tr>
+        <th><span>Id</span></th>
+        <th> <span>Title</span></th>
+        <th><span>Date</span></th>
+        <th><span>Content</span></th>
+      </tr>
+    </thead>
+    <tbody class="inner-table"></tbody>
+  </table>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", getTable);
+
+    let dataTable = [];
+
+    function getTable(){
+      fetch('/getTable.php', {
+        method: "GET"
+      })
+      .then(function(resp){
+        return resp.json()
+      })
+      .then(function(data){
+        let out = '';
+
+        for(let row in data){
+          console.log(data[row][1])
+          out += `
+          <tr>
+            <td><span class="ui-text-regular">${data[row]['id']}</span></td>
+            <td><span class="ui-text-regular">${data[row]['title']}</span></td>
+            <td><span class="ui-text-regular">${data[row]['date']}</span></td>
+            <td><span class="ui-text-regular">${data[row]['content']}</span></td>
+          </tr>
+          `
+        }
+        document.querySelector('.inner-table').insertAdjacentHTML('beforeend', out);
+      })
+      .catch(e => console.log(e))
+    }
+  </script>
+</body>
+</html>
